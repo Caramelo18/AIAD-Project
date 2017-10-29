@@ -1,4 +1,4 @@
-package src;
+package TradeHero;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,7 +14,7 @@ import java.net.URLEncoder;
 import java.util.*;
 
 
-public class Data {
+public class Stock {
 
     String url = "https://www.alphavantage.co/";
     String charset = java.nio.charset.StandardCharsets.UTF_8.name();  // Or in Java 7 and later, use the constant: java.nio.charset.StandardCharsets.UTF_8.name()
@@ -27,6 +27,23 @@ public class Data {
 
     private JsonObject object;
     private TreeMap<String, Double> dailyValue = new TreeMap<>();
+    private ArrayList<Double> values = new ArrayList<>();
+    
+    public Stock(String stockName){
+    	this.symbol = stockName;
+    	
+    	initializeQuery();
+        getData();
+        parseData();
+    }
+    
+    public TreeMap<String, Double> getStockDays() {
+    	return dailyValue;
+    }
+    
+    public ArrayList<Double> getStockValues() {
+    	return values;
+    }
 
 
     //https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=FB&apikey=PHVQ81JSW6C2OUUS
@@ -92,19 +109,12 @@ public class Data {
             String value = values.get("4. close").toString();
             value = value.replace("\"", "");
             dailyValue.put(day, Double.valueOf(value));
+            this.values.add(Double.valueOf(value));
         }
+        Collections.reverse(this.values);
 
-        System.out.println(dailyValue);
-
-    }
-
-
-    public static void main(String[] args){
-        Data d = new Data();
-
-        d.initializeQuery();
-        d.getData();
-        d.parseData();
+        //System.out.println(dailyValue);
 
     }
+
 }
