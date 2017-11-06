@@ -6,31 +6,29 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.ScheduledMethod;
+import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.space.grid.Grid;
+
 import java.util.Set;
 import java.util.TreeMap;
 
-public class MasterAgent {
-	private HashMap<String, TreeMap<String, Double>> stocks;
-	private HashMap<String, ArrayList<Double>> stockValues;
-	private String[] days;
+public class MasterAgent extends Agent{
 	
-	private int initialCash = 50000;
-	private int cash = initialCash;
-	private int stockValue = 0;
-	private HashMap<String, Integer> currentStock;
+	private ArrayList<Trade> trades;
 	
-	private int i = 0;
 	
-	public MasterAgent(HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
-		this.stocks = stocks;
-		this.stockValues = stockValues;
-		this.currentStock = new HashMap<String, Integer>();
+	public MasterAgent(ContinuousSpace<Object> space, Grid<Object> grid, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
+		super(space, grid, stocks, stockValues);
 		
-		System.out.println(stockValues.get("FB"));
-		getMaximumProfit("FB");
+		System.out.println(stockValues.get("GOOGL"));
+		trades = new ArrayList<Trade>();
+		trades.add(getMaximumProfit("GOOGL"));
 	}
 	
-	private void getMaximumProfit(String name){
+	private Trade getMaximumProfit(String name){
 		ArrayList<Double> values = this.stockValues.get(name);
 		
 		Double maxProfit = (double) -500;
@@ -49,12 +47,28 @@ public class MasterAgent {
 				}
 			}
 		}
-		
-		
-		System.out.println(maxProfit);
-		System.out.println(buyAt);
-		System.out.println(sellAt);
+
+		return new Trade(name, buyAt, sellAt);
 	}
 	
-	
+	@ScheduledMethod(start = 1, interval = 1)
+	public void day() {
+		System.out.println(day + " " + getCurrentValue());
+				
+		for(Trade t: trades){
+			if(t.getBuy() == day){
+				purchaseStock(t.getCompany(), 30);
+				System.out.println("buy " + t.getCompany());
+			}
+			else if(t.getSell() == day){
+				sellStock(t.getCompany());
+				System.out.println("sell " + t.getCompany());
+			}
+		}
+		day++;
+		
+		if(day > this.getNumDays()){
+			RunEnvironment.getInstance().endRun();
+		}
+	}
 }
