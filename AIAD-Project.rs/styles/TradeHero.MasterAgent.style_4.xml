@@ -4,7 +4,6 @@
   <sizeMax>15.0</sizeMax>
   <sizeMin>1.0</sizeMin>
   <sizeScale>1.0</sizeScale>
-  <sizeMethodName>getSize</sizeMethodName>
   <label></label>
   <labelMethod>getCurrentValue</labelMethod>
   <labelPosition>bottom</labelPosition>

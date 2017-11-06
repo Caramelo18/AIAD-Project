@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.grid.Grid;
 
 public class Agent {
 	protected ContinuousSpace<Object> space ;
 	protected Grid<Object> grid ;
-	protected HashMap<String, TreeMap<String, Double>> stocks;
-	protected HashMap<String, ArrayList<Double>> stockValues;
+	protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
+	protected HashMap<String, ArrayList<Double>> stocksListValues;
 	protected String[] days;
 	
 	protected int initialCash = 50000;
@@ -23,18 +24,20 @@ public class Agent {
 	public Agent(ContinuousSpace<Object> space, Grid<Object> grid, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
 		this.space = space;
 		this.grid = grid;
-		this.stocks = stocks;
-		this.stockValues = stockValues;
+		this.stocksDailyValues = stocks;
+		this.stocksListValues = stockValues;
 		this.currentStock = new HashMap<String, Integer>();
 		
 		getNumDays();
-		System.out.println(stockValues.get("GOOGL"));
+		
+		RunEnvironment.getInstance().setScheduleTickDelay(20);
+
 	}
 	
 	protected int getNumDays(){
 		int numDays = 99999;
-		for(String key: stockValues.keySet()){
-			ArrayList<Double> companyStock = stockValues.get(key);
+		for(String key: stocksListValues.keySet()){
+			ArrayList<Double> companyStock = stocksListValues.get(key);
 			if(companyStock.size() < numDays)
 				numDays = companyStock.size();
 		}
@@ -45,7 +48,7 @@ public class Agent {
 		double value = 0;
 		for(String key: currentStock.keySet()){
 			int numStock = currentStock.get(key);
-			ArrayList<Double> companyStock = stockValues.get(key);
+			ArrayList<Double> companyStock = stocksListValues.get(key);
 			double dailyValue = companyStock.get(day);
 			
 			value += dailyValue * numStock;
@@ -63,7 +66,7 @@ public class Agent {
 	}
 	
 	protected boolean purchaseStock(String company, int ammount){
-		ArrayList<Double> companyStock = stockValues.get(company);
+		ArrayList<Double> companyStock = stocksListValues.get(company);
 		
 		double currentPrice = companyStock.get(day);
 		
@@ -84,7 +87,7 @@ public class Agent {
 	}
 	
 	protected boolean sellStock(String company){
-		ArrayList<Double> companyStock = stockValues.get(company);
+		ArrayList<Double> companyStock = stocksListValues.get(company);
 		
 		double currentPrice = companyStock.get(day);
 		
@@ -98,6 +101,15 @@ public class Agent {
 		}
 		
 		return false;
+	}
+	
+	public double getSize(){
+		double margin = (this.getCurrentValue() - this.initialCash) / this.initialCash;
+		margin *= 35;
+		margin += 1;
+		
+		System.out.println("growth: " + margin);
+		return 100*margin;
 	}
 	
 }
