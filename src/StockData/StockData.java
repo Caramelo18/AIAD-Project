@@ -41,6 +41,11 @@ public class StockData implements Serializable{
 		companies.add("AMZN"); //Amazon
 		companies.add("AAPL"); //Apple
 		companies.add("INTC"); //Intel
+		companies.add("AKAM"); //Akamai
+		companies.add("CARS"); //Cars.com
+		companies.add("SITO"); //SITO
+		companies.add("PYPL"); //Paypal
+		companies.add("ORCL"); //Oracle
 		
 		stocksDailyValues = new HashMap<String, TreeMap<String, Double>>();
 		stocksListValues = new HashMap<String, ArrayList<Double>>();

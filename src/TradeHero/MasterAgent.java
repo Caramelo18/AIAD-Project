@@ -1,32 +1,27 @@
 package TradeHero;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TreeMap;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.grid.Grid;
 
-import java.util.Set;
-import java.util.TreeMap;
 
 public class MasterAgent extends Agent{
 	
 	private ArrayList<Trade> trades;
+	private int numCompanies = 3;
 	
 	
-	public MasterAgent(ContinuousSpace<Object> space, Grid<Object> grid, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
-		super(space, grid, stocks, stockValues);
+	public MasterAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
+		super(space, stocks, stockValues);
 		
 		Random r = new Random();
 		trades = new ArrayList<Trade>();
-		for(int i = 0; i < companies.size() / 3; i++){
+		for(int i = 0; i < numCompanies; i++){
 			int j = r.nextInt(companies.size());
 			String company = companies.get(j);
 			trades.add(getMaximumProfit(company));
@@ -58,17 +53,13 @@ public class MasterAgent extends Agent{
 	
 	@ScheduledMethod(start = 1, interval = 1)
 	public void day() {
-		//System.out.println(day + " " + getCurrentCash());
-		System.out.println(trades);	
-		System.out.println(currentStock);
 		for(Trade t: trades){
 			if(t.getBuy() == day){
-				purchaseStock(t.getCompany(), 30);
-				//System.out.println("buy " + t.getCompany());
+				int num = getNumActionsToBuy(t.getCompany());
+				purchaseStock(t.getCompany(), num);
 			}
 			else if(t.getSell() == day){
 				sellStock(t.getCompany());
-				//System.out.println("sell " + t.getCompany());
 			}
 		}
 		day++;
@@ -76,5 +67,15 @@ public class MasterAgent extends Agent{
 		if(day > this.getNumDays()){
 			RunEnvironment.getInstance().endRun();
 		}
+		
+		//TODO: is this ok?
+		RunEnvironment.getInstance().setScheduleTickDelay(20);
+	}
+	
+	private int getNumActionsToBuy(String company){
+		double spend = cash/numCompanies;
+		numCompanies--;
+		double num = spend/getCurrentStockValue(company);
+		return  (int)num;
 	}
 }

@@ -8,7 +8,7 @@
   <label></label>
   <labelMethod>getCurrentValue</labelMethod>
   <labelPosition>bottom</labelPosition>
-  <labelPrecision>1</labelPrecision>
+  <labelPrecision>3</labelPrecision>
   <labelOffset>5.0</labelOffset>
   <labelFontSize>14</labelFontSize>
   <labelFontType>0</labelFontType>

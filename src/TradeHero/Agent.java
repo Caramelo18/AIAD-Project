@@ -4,13 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.continuous.ContinuousSpace;
-import repast.simphony.space.grid.Grid;
 
-public class Agent {
+public class Agent implements Comparable<Agent>{
 	protected ContinuousSpace<Object> space ;
-	protected Grid<Object> grid ;
 	protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
 	protected HashMap<String, ArrayList<Double>> stocksListValues;
 	protected String[] days;
@@ -21,17 +18,13 @@ public class Agent {
 	
 	protected int day = 0;
 
-	public Agent(ContinuousSpace<Object> space, Grid<Object> grid, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
+	public Agent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
 		this.space = space;
-		this.grid = grid;
 		this.stocksDailyValues = stocks;
 		this.stocksListValues = stockValues;
 		this.currentStock = new HashMap<String, Integer>();
 		
 		getNumDays();
-		
-		RunEnvironment.getInstance().setScheduleTickDelay(20);
-
 	}
 	
 	protected int getNumDays(){
@@ -105,11 +98,30 @@ public class Agent {
 	
 	public double getSize(){
 		double margin = (this.getCurrentValue() - this.initialCash) / this.initialCash;
-		margin *= 35;
+		margin *= 5;
 		margin += 1;
 		
-		System.out.println("growth: " + margin);
 		return 100*margin;
 	}
 	
+	protected double getCurrentStockValue(String company){
+		ArrayList<Double> companyStock = stocksListValues.get(company);
+
+		return companyStock.get(day);
+	}
+	
+	protected double getAgentRatio(){
+		return this.getCurrentValue()/this.initialCash;		
+	}
+	
+
+	@Override
+	public int compareTo(Agent arg0) {
+		if(this.getAgentRatio() > arg0.getAgentRatio())
+			return 1;
+		else if(this.getAgentRatio() == arg0.getAgentRatio())
+			return 0;
+		else
+			return -1;
+	}
 }
