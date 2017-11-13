@@ -10,7 +10,7 @@ import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 
 
-public class MasterAgent extends Agent{
+public class MasterAgent extends TradeAgent{
 	
 	private ArrayList<Trade> trades;
 	private int numCompanies = 3;
@@ -32,8 +32,8 @@ public class MasterAgent extends Agent{
 		ArrayList<Double> values = this.stocksListValues.get(name);
 		
 		Double maxProfit = (double) -500;
-		int sellAt = 0;
-		int buyAt = 0;
+		int sellAt = -1;
+		int buyAt = -1;
 		
 		for(int i = 0; i < values.size(); i++){
 			for(int j = i + 1; j < values.size(); j++){
@@ -63,10 +63,10 @@ public class MasterAgent extends Agent{
 			}
 		}
 		day++;
-		
+		/*
 		if(day > this.getNumDays()){
 			RunEnvironment.getInstance().endRun();
-		}
+		}*/
 		
 		//TODO: is this ok?
 		RunEnvironment.getInstance().setScheduleTickDelay(20);

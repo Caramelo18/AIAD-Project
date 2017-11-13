@@ -3,10 +3,11 @@ package TradeHero;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
+import sajas.core.Agent;
 
 import repast.simphony.space.continuous.ContinuousSpace;
 
-public class Agent implements Comparable<Agent>{
+public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected ContinuousSpace<Object> space ;
 	protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
 	protected HashMap<String, ArrayList<Double>> stocksListValues;
@@ -18,7 +19,7 @@ public class Agent implements Comparable<Agent>{
 	
 	protected int day = 0;
 
-	public Agent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
+	public TradeAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
 		this.space = space;
 		this.stocksDailyValues = stocks;
 		this.stocksListValues = stockValues;
@@ -111,12 +112,12 @@ public class Agent implements Comparable<Agent>{
 	}
 	
 	protected double getAgentRatio(){
-		return this.getCurrentValue()/this.initialCash;		
+		return (this.getCurrentValue()/this.initialCash) - 1;		
 	}
 	
 
 	@Override
-	public int compareTo(Agent arg0) {
+	public int compareTo(TradeAgent arg0) {
 		if(this.getAgentRatio() > arg0.getAgentRatio())
 			return 1;
 		else if(this.getAgentRatio() == arg0.getAgentRatio())

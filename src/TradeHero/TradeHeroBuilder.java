@@ -10,8 +10,10 @@ import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.dataLoader.ContextBuilder;
+import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.RandomCartesianAdder;
+import repast.simphony.ui.RunOptionsModel;
 
 public class TradeHeroBuilder implements ContextBuilder<Object> {
 	private HashMap<String, TreeMap<String, Double>> stocks;
@@ -38,7 +40,15 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(b);
 		}
-				
+		
+		//RunEnvironment.getInstance().setScheduleTickDelay(20);
+		RunOptionsModel options = new RunOptionsModel();
+		options.setScheduleTickDelay(200);
+		options.setStopAt(101);
+		options.simStarted();
+		
+		
+		
 		return context;
 	}
 
