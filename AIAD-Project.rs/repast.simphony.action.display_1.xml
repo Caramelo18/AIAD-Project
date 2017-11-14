@@ -1,5 +1,5 @@
 <repast.simphony.visualization.engine.CartesianDisplayDescriptor>
-  <name>Display 1</name>
+  <name>AgentsDisplay</name>
   <type>2D</type>
   <styles>
     <entry>
@@ -14,15 +14,25 @@
   <editedStyles>
     <entry>
       <string>TradeHero.BasicAgent</string>
-      <string>TradeHero.BasicAgent.style_4.xml</string>
+      <string>TradeHero.BasicAgent.style_0.xml</string>
     </entry>
     <entry>
       <string>TradeHero.MasterAgent</string>
-      <string>TradeHero.MasterAgent.style_3.xml</string>
+      <string>TradeHero.MasterAgent.style_0.xml</string>
     </entry>
   </editedStyles>
-  <netStyles/>
-  <editedNetStyles/>
+  <netStyles>
+    <entry>
+      <string>follow network</string>
+      <string>repast.simphony.visualization.editedStyle.EditedEdgeStyle2D</string>
+    </entry>
+  </netStyles>
+  <editedNetStyles>
+    <entry>
+      <string>follow network</string>
+      <string>follownetwork.style_0.xml</string>
+    </entry>
+  </editedNetStyles>
   <frequency>ON_MOVE</frequency>
   <schedParams>
     <start>1.0</start>
@@ -31,7 +41,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1438261473</hashCode>
+    <hashCode>1260503169</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>space</layoutProjection>
@@ -39,11 +49,11 @@
   <layerOrder>
     <entry>
       <string>TradeHero.BasicAgent</string>
-      <int>0</int>
+      <int>1</int>
     </entry>
     <entry>
       <string>TradeHero.MasterAgent</string>
-      <int>1</int>
+      <int>0</int>
     </entry>
   </layerOrder>
   <projections>
@@ -52,11 +62,23 @@
       <attributes/>
       <type>continuous space</type>
     </repast.simphony.scenario.data.ProjectionData>
+    <repast.simphony.scenario.data.ProjectionData>
+      <id>follow network</id>
+      <attributes/>
+      <type>network</type>
+    </repast.simphony.scenario.data.ProjectionData>
   </projections>
   <visualizationProperties class="repast.simphony.visualization.UnitSizeLayoutProperties">
     <unitSize>15.0</unitSize>
   </visualizationProperties>
   <projectionDescriptors>
+    <entry>
+      <string>follow network</string>
+      <repast.simphony.visualization.engine.DefaultProjectionDescriptor>
+        <proj reference="../../../../projections/repast.simphony.scenario.data.ProjectionData[2]"/>
+        <props/>
+      </repast.simphony.visualization.engine.DefaultProjectionDescriptor>
+    </entry>
     <entry>
       <string>space</string>
       <repast.simphony.visualization.continuous.ContinuousProjectionDescriptor>
