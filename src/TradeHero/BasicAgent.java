@@ -17,7 +17,6 @@ import repast.simphony.util.ContextUtils;
 public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
-	private ArrayList<TradeAgent> followedAgents;
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
@@ -47,8 +46,8 @@ public class BasicAgent extends TradeAgent {
 		Network<Object> net = (Network<Object>) context.getProjection("follow network");
 
 		TradeAgent follow = pickFollow(agentsList);
-		if(follow != null){
-			if(!followedAgents.contains(follow)){
+		if(follow != null && follow != this){
+			if(!followedAgents.contains(follow) && !followers.contains(follow)){
 				net.addEdge(this, follow);
 				followedAgents.add(follow);
 				follow.addFollower(this);
@@ -108,9 +107,22 @@ public class BasicAgent extends TradeAgent {
 	public void receiveMessages(){
 		ACLMessage message = receive();
 		
-		if(message != null){
-			String company = message.getContent();
-			//this.purchaseStock(company, 500);
+		while(message != null){
+			String content = message.getContent();
+			
+			String[] messageParts = content.split(" ");
+			String action = messageParts[0];
+			String company = messageParts[1];
+			//System.out.println("RECEIVE " + content + " " + this.getAID() + " " + day);
+			if(action.equals("BUY")){
+				this.purchaseStock(company, 500);
+				this.informFollowers("BUY", company);
+			}
+			else if (action.equals("SELL")){
+				this.sellStock(company);
+				this.informFollowers("SELL", company);
+			}
+			message = receive();
 		}
 	}
 }

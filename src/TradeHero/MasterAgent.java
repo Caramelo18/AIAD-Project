@@ -57,9 +57,13 @@ public class MasterAgent extends TradeAgent{
 			if(t.getBuy() == day){
 				int num = getNumActionsToBuy(t.getCompany());
 				purchaseStock(t.getCompany(), num);
+				//System.out.println("Sending Buy");
+				informFollowers("BUY", t.getCompany());
 			}
 			else if(t.getSell() == day){
 				sellStock(t.getCompany());
+				//System.out.println("Sending Sell");
+				informFollowers("SELL", t.getCompany());
 			}
 		}
 		day++;
@@ -74,6 +78,8 @@ public class MasterAgent extends TradeAgent{
 		double num = spend/getCurrentStockValue(company);
 		return  (int)num;
 	}
+	
+	
 	
 	
 }

@@ -2,6 +2,7 @@ package TradeHero;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.TreeMap;
 
 import StockData.StockData;
@@ -41,14 +42,16 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		stocks = stockData.getStocksDailyValues();
 		stocksValues = stockData.getStocksListValues();
 		
+		Random rand = new Random();
+		
 		for(int i = 0; i < 10; i++){
 			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(m);
 			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(b);
 			try {
-				mainContainer.acceptNewAgent("BasicAgent"+i, b).start();
-				mainContainer.acceptNewAgent("MasterAgent"+i, m).start();
+				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(9999999), b).start();
+				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(9999999), m).start();
 			} catch (StaleProxyException e) {
 				e.printStackTrace();
 			}
@@ -65,7 +68,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		return context;
 	}
 	
-	public void launchJADE(){
+	public void launchJADE(){		
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);

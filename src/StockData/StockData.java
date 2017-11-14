@@ -24,11 +24,11 @@ public class StockData implements Serializable{
 		
 		if(f.exists() && !f.isDirectory()){
 			load();
-			System.out.println("Loading");
+			//System.out.println("Loading");
 		} else {
 			fetchData();
 			save();
-			System.out.println("Saving");
+			//System.out.println("Saving");
 		}
 	}
 	

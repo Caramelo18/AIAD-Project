@@ -20,8 +20,9 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected double cash = initialCash;
 	protected HashMap<String, Integer> currentStock;
 	
-	private ArrayList<TradeAgent> followers;
-	
+	protected ArrayList<TradeAgent> followers;
+	protected ArrayList<TradeAgent> followedAgents;
+
 	protected int day = 0;
 
 	public TradeAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
@@ -36,8 +37,6 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	@Override
 	public void setup()
 	{
-		
-		System.out.println("OI CRL " + this.getName());
 	}
 	
 	protected int getNumDays(){
@@ -52,13 +51,17 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	
 	public double getStockValue(){
 		double value = 0;
+		
+		
 		for(String key: currentStock.keySet()){
+			//System.out.print(key);
 			int numStock = currentStock.get(key);
 			ArrayList<Double> companyStock = stocksListValues.get(key);
 			double dailyValue = companyStock.get(day);
 			
 			value += dailyValue * numStock;
 		}
+		//System.out.println("\n");
 		
 		return value;
 	}
@@ -95,7 +98,11 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected boolean sellStock(String company){
 		ArrayList<Double> companyStock = stocksListValues.get(company);
 		
-		double currentPrice = companyStock.get(day);
+		double currentPrice = -1;
+		if(day >= companyStock.size())
+			currentPrice= companyStock.get(companyStock.size() - 1);
+		else
+			currentPrice = companyStock.get(day);
 		
 		double earnings = -1;
 		if(currentStock.containsKey(company)){
@@ -141,17 +148,32 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	public void addFollower(TradeAgent agent){
 		followers.add(agent);
 		
+		//System.out.println("Joined follower");
 		for(String company: currentStock.keySet()){
-			sendMessage(agent, company);
+			String message = "BUY " + company;
+			sendMessage(agent, message);
 		}
 	}
 	
-	public void sendMessage(TradeAgent receiver, String text){
+	public ArrayList<TradeAgent> getFollowers(){
+		return this.followers;
+	}
+	
+	protected void sendMessage(TradeAgent receiver, String text){
 		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 		AID receiverAgent = (AID) receiver.getAID();
 		
+		//System.out.println("SEND " + text + " " + this.getAID() + " " + day);
 		message.addReceiver(receiverAgent);
 		message.setContent(text);
 		send(message);
+	}
+	
+	protected void informFollowers(String action, String company){
+		String message = action + " " + company;
+		
+		for(TradeAgent agent: followers){
+			sendMessage(agent, message);
+		}
 	}
 }
