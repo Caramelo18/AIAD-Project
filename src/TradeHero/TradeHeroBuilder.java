@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.TreeMap;
 
 import StockData.StockData;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
+import jade.wrapper.StaleProxyException;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactory;
 import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
@@ -14,14 +17,18 @@ import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.RandomCartesianAdder;
 import repast.simphony.ui.RunOptionsModel;
+import sajas.core.Runtime;
+import sajas.wrapper.ContainerController;
 
 public class TradeHeroBuilder implements ContextBuilder<Object> {
 	private HashMap<String, TreeMap<String, Double>> stocks;
 	private HashMap<String, ArrayList<Double>> stocksValues;
+	private ContainerController mainContainer;
 	
 	@Override
 	public Context build(Context<Object> context) {
 		context.setId("TradeHero");
+		launchJADE();
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder . createContinuousSpaceFactory ( null );
 		ContinuousSpace < Object > space = spaceFactory . createContinuousSpace ("space", context , new RandomCartesianAdder < Object >() , new repast . simphony . space . continuous . WrapAroundBorders () ,50 , 50);
@@ -39,6 +46,12 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			context.add(m);
 			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(b);
+			try {
+				mainContainer.acceptNewAgent("BasicAgent"+i, b).start();
+				mainContainer.acceptNewAgent("MasterAgent"+i, m).start();
+			} catch (StaleProxyException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		//RunEnvironment.getInstance().setScheduleTickDelay(20);
@@ -50,6 +63,12 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		
 		
 		return context;
+	}
+	
+	public void launchJADE(){
+		Runtime rt = Runtime.instance();
+		Profile p1 = new ProfileImpl();
+		mainContainer = rt.createMainContainer(p1);
 	}
 
 }

@@ -63,10 +63,6 @@ public class MasterAgent extends TradeAgent{
 			}
 		}
 		day++;
-		/*
-		if(day > this.getNumDays()){
-			RunEnvironment.getInstance().endRun();
-		}*/
 		
 		//TODO: is this ok?
 		RunEnvironment.getInstance().setScheduleTickDelay(20);
@@ -78,4 +74,6 @@ public class MasterAgent extends TradeAgent{
 		double num = spend/getCurrentStockValue(company);
 		return  (int)num;
 	}
+	
+	
 }

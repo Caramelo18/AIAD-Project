@@ -3,6 +3,9 @@ package TradeHero;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
+
+import jade.lang.acl.ACLMessage;
+import sajas.core.AID;
 import sajas.core.Agent;
 
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -17,6 +20,8 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected double cash = initialCash;
 	protected HashMap<String, Integer> currentStock;
 	
+	private ArrayList<TradeAgent> followers;
+	
 	protected int day = 0;
 
 	public TradeAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
@@ -24,8 +29,15 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		this.stocksDailyValues = stocks;
 		this.stocksListValues = stockValues;
 		this.currentStock = new HashMap<String, Integer>();
-		
+		this.followers = new ArrayList<TradeAgent>();
 		getNumDays();
+	}
+	
+	@Override
+	public void setup()
+	{
+		
+		System.out.println("OI CRL " + this.getName());
 	}
 	
 	protected int getNumDays(){
@@ -124,5 +136,22 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 			return 0;
 		else
 			return -1;
+	}
+	
+	public void addFollower(TradeAgent agent){
+		followers.add(agent);
+		
+		for(String company: currentStock.keySet()){
+			sendMessage(agent, company);
+		}
+	}
+	
+	public void sendMessage(TradeAgent receiver, String text){
+		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+		AID receiverAgent = (AID) receiver.getAID();
+		
+		message.addReceiver(receiverAgent);
+		message.setContent(text);
+		send(message);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import com.google.common.collect.*;
 
+import jade.lang.acl.ACLMessage;
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
@@ -14,13 +15,25 @@ import repast.simphony.space.graph.Network;
 import repast.simphony.util.ContextUtils;
 
 public class BasicAgent extends TradeAgent {
-
+	
+	private int agentsToFollow = 3;
+	private ArrayList<TradeAgent> followedAgents;
+	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
+		followedAgents = new ArrayList<TradeAgent>();
 	}
 	
 	@ScheduledMethod(start = 1, interval = 1)
 	public void watch(){
+		receiveMessages();
+		
+		if(agentsToFollow <= 0 || !isFollowing())
+		{
+			day++;
+			return;
+		}
+		
 		TreeMultiset<TradeAgent> agents = TreeMultiset.create();
 		for(Object ob: space.getObjects()){
 			TradeAgent agent = (TradeAgent) ob;
@@ -32,9 +45,17 @@ public class BasicAgent extends TradeAgent {
 		
 		Context<Object> context = ContextUtils.getContext(this);
 		Network<Object> net = (Network<Object>) context.getProjection("follow network");
-		//net.addEdge(this, agentsList[agents.size() - 1]);
-		net.addEdge(this, pickFollow(agentsList));
-		//pickFollow(agentsList);
+
+		TradeAgent follow = pickFollow(agentsList);
+		if(follow != null){
+			if(!followedAgents.contains(follow)){
+				net.addEdge(this, follow);
+				followedAgents.add(follow);
+				follow.addFollower(this);
+				agentsToFollow--;
+			}
+		}	
+
 		day++;
 	}
 	
@@ -59,7 +80,7 @@ public class BasicAgent extends TradeAgent {
 		Random rand = new Random();
 		double pick = rand.nextDouble()*max;
 		
-		System.out.println("pick: " +  pick);
+		//System.out.println("pick: " +  pick);
 		for(AgentRatio agent: agentsRatios){
 			if(pick < agent.getRatio()){
 				follow = agent.getAgent();
@@ -67,10 +88,29 @@ public class BasicAgent extends TradeAgent {
 			}
 		}
 		
-		for(AgentRatio agent: agentsRatios){
+		/*for(AgentRatio agent: agentsRatios){
 			System.out.println(agent.getAgent().getAgentRatio() + " " + agent.getRatio());
 		}
-		System.out.println("\n");
+		System.out.println("\n");*/
 		return follow;
+	}
+	
+	public boolean isFollowing(){
+		Random rand = new Random();
+		double val = rand.nextGaussian()*25 + 50;
+		//System.out.println("Random: " + val);
+		if(day >= val)
+			return true;
+		else
+			return false;
+	}
+	
+	public void receiveMessages(){
+		ACLMessage message = receive();
+		
+		if(message != null){
+			String company = message.getContent();
+			//this.purchaseStock(company, 500);
+		}
 	}
 }
