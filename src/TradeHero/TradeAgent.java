@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
-import sajas.core.AID;
 import sajas.core.Agent;
-
+import repast.simphony.context.Context;
 import repast.simphony.space.continuous.ContinuousSpace;
+import repast.simphony.util.ContextUtils;
 
 public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected ContinuousSpace<Object> space ;
@@ -16,13 +17,18 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected HashMap<String, ArrayList<Double>> stocksListValues;
 	protected String[] days;
 	
-	protected int initialCash = 50000;
+	protected final int initialCash = 50000;
+	protected double followersProfit = 0;
 	protected double cash = initialCash;
 	protected HashMap<String, Integer> currentStock;
 	
 	protected ArrayList<TradeAgent> followers;
 	protected ArrayList<TradeAgent> followedAgents;
 
+	protected ArrayList<SuggestedTrade> suggestedTrades;
+	
+	protected final double shareMargin = 0.05;
+	
 	protected int day = 0;
 
 	public TradeAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
@@ -31,12 +37,8 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		this.stocksListValues = stockValues;
 		this.currentStock = new HashMap<String, Integer>();
 		this.followers = new ArrayList<TradeAgent>();
-		getNumDays();
-	}
-	
-	@Override
-	public void setup()
-	{
+		this.suggestedTrades = new ArrayList<SuggestedTrade>();
+		//getNumDays();
 	}
 	
 	protected int getNumDays(){
@@ -95,7 +97,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		return true;
 	}
 	
-	protected boolean sellStock(String company){
+	protected double sellStock(String company){
 		ArrayList<Double> companyStock = stocksListValues.get(company);
 		
 		double currentPrice = -1;
@@ -110,10 +112,10 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 			earnings = ammount * currentPrice;
 			currentStock.remove(company);
 			cash += earnings;
-			return true;
+			return earnings;
 		}
 		
-		return false;
+		return -1;
 	}
 	
 	public double getSize(){
@@ -154,11 +156,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 			sendMessage(agent, message);
 		}
 	}
-	
-	public ArrayList<TradeAgent> getFollowers(){
-		return this.followers;
-	}
-	
+		
 	protected void sendMessage(TradeAgent receiver, String text){
 		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 		AID receiverAgent = (AID) receiver.getAID();
@@ -175,5 +173,35 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		for(TradeAgent agent: followers){
 			sendMessage(agent, message);
 		}
+	}
+	
+	protected void addSuggestedTrade(TradeAgent agent, String company){
+		SuggestedTrade trade = new SuggestedTrade(agent, company);
+		this.suggestedTrades.add(trade);
+	}
+	
+	protected TradeAgent getAgentByAID(AID aid){
+		Context<Object> context = ContextUtils.getContext(this);
+		
+		for(Object obj: context){
+			TradeAgent agent = (TradeAgent) obj;
+			if(agent.getAID().equals(aid))
+				return agent;	
+		}
+		return null;
+	}
+	
+	protected void shareProfit(SuggestedTrade trade, double value){
+		if(value <= 0)
+			return;
+		
+		TradeAgent agent = trade.getAgent();
+		
+		double share = value * this.shareMargin;
+		
+		this.cash -= share;
+		
+		agent.followersProfit += share;
+		agent.cash += share;
 	}
 }

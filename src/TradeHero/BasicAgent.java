@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import com.google.common.collect.*;
 
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import repast.simphony.context.Context;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -17,6 +18,8 @@ import repast.simphony.util.ContextUtils;
 public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
+	private int numCompanies = agentsToFollow * 3;
+	
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
@@ -26,6 +29,10 @@ public class BasicAgent extends TradeAgent {
 	@ScheduledMethod(start = 1, interval = 1)
 	public void watch(){
 		receiveMessages();
+
+		//for(String company: currentStock.keySet()){
+			//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
+		//}
 		
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
@@ -54,7 +61,6 @@ public class BasicAgent extends TradeAgent {
 				agentsToFollow--;
 			}
 		}	
-
 		day++;
 	}
 	
@@ -104,25 +110,44 @@ public class BasicAgent extends TradeAgent {
 			return false;
 	}
 	
-	public void receiveMessages(){
+	protected void receiveMessages(){
 		ACLMessage message = receive();
 		
 		while(message != null){
 			String content = message.getContent();
+			
+			AID senderAID = message.getSender();
+			TradeAgent sender = getAgentByAID(senderAID);
 			
 			String[] messageParts = content.split(" ");
 			String action = messageParts[0];
 			String company = messageParts[1];
 			//System.out.println("RECEIVE " + content + " " + this.getAID() + " " + day);
 			if(action.equals("BUY")){
-				this.purchaseStock(company, 500);
+				int numStock = getNumActionsToBuy(company);
+				this.purchaseStock(company, numStock);
 				this.informFollowers("BUY", company);
+				this.addSuggestedTrade(sender, company);
 			}
 			else if (action.equals("SELL")){
-				this.sellStock(company);
+				double value = this.sellStock(company);
 				this.informFollowers("SELL", company);
+				//System.out.println("Selling " + company);
+				
+				for(SuggestedTrade trade: suggestedTrades){
+					if(trade.getCompany().equals(company)){
+						this.shareProfit(trade, value);
+					}
+				}
 			}
 			message = receive();
 		}
+	}
+	
+	protected int getNumActionsToBuy(String company){
+		double spend = cash/numCompanies;
+		numCompanies--;
+		double num = spend/getCurrentStockValue(company);
+		return  (int)num;
 	}
 }

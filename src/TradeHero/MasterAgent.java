@@ -47,6 +47,10 @@ public class MasterAgent extends TradeAgent{
 				}
 			}
 		}
+		
+		if(sellAt == values.size() - 1){
+			sellAt--;
+		}
 
 		return new Trade(name, buyAt, sellAt);
 	}
@@ -67,6 +71,9 @@ public class MasterAgent extends TradeAgent{
 			}
 		}
 		day++;
+		//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
+
+		//System.out.println("Followers profit: " + this.followersProfit + " " + this.cash);
 		
 		//TODO: is this ok?
 		RunEnvironment.getInstance().setScheduleTickDelay(20);
