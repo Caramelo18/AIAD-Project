@@ -18,6 +18,7 @@ import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.RandomCartesianAdder;
 import repast.simphony.ui.RunOptionsModel;
+import sajas.core.Agent;
 import sajas.core.Runtime;
 import sajas.wrapper.ContainerController;
 
@@ -29,6 +30,12 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 	@Override
 	public Context build(Context<Object> context) {
 		context.setId("TradeHero");
+		
+		for(Object agent: context){
+			context.remove(agent);
+			mainContainer.removeLocalAgent((Agent) agent);
+		}
+		
 		launchJADE();
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder . createContinuousSpaceFactory ( null );
@@ -50,8 +57,8 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(b);
 			try {
-				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(9999999), b).start();
-				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(9999999), m).start();
+				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(Integer.MAX_VALUE), b).start();
+				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(Integer.MAX_VALUE), m).start();
 			} catch (StaleProxyException e) {
 				e.printStackTrace();
 			}
@@ -64,7 +71,6 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		options.simStarted();
 		
 		
-		
 		return context;
 	}
 	
@@ -73,5 +79,5 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
 	}
-
+	
 }

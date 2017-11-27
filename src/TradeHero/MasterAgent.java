@@ -86,7 +86,22 @@ public class MasterAgent extends TradeAgent{
 		return  (int)num;
 	}
 	
-	
-	
-	
+	@Override
+	protected boolean willHaveProfit(String company){
+		Trade t = null;
+		
+		for(Trade curr: trades){
+			if(curr.getCompany() == company)
+				t = curr;
+		}
+		
+		double currentPrice = stocksListValues.get(t.getCompany()).get(day + 1);
+		
+		double sellPrice = stocksListValues.get(t.getCompany()).get(t.getSell()) * (1 - this.shareMargin);
+		 
+		if(sellPrice < currentPrice)
+			return true;
+		return false;
+		
+	}
 }

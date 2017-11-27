@@ -152,8 +152,10 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		
 		//System.out.println("Joined follower");
 		for(String company: currentStock.keySet()){
-			String message = "BUY " + company;
-			sendMessage(agent, message);
+			if(willHaveProfit(company)){
+				String message = "BUY " + company;
+				sendMessage(agent, message);
+			}
 		}
 	}
 		
@@ -204,4 +206,6 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		agent.followersProfit += share;
 		agent.cash += share;
 	}
+	
+	protected boolean willHaveProfit(String company){return true;}
 }

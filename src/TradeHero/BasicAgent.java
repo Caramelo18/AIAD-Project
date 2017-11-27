@@ -150,4 +150,9 @@ public class BasicAgent extends TradeAgent {
 		double num = spend/getCurrentStockValue(company);
 		return  (int)num;
 	}
+	
+	@Override
+	protected boolean willHaveProfit(String company){
+		return true;
+	}
 }
