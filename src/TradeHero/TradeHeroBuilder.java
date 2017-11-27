@@ -15,6 +15,7 @@ import repast.simphony.context.space.continuous.ContinuousSpaceFactoryFinder;
 import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.dataLoader.ContextBuilder;
 import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.parameter.Parameters;
 import repast.simphony.space.continuous.ContinuousSpace;
 import repast.simphony.space.continuous.RandomCartesianAdder;
 import repast.simphony.ui.RunOptionsModel;
@@ -51,7 +52,32 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		
 		Random rand = new Random();
 		
-		for(int i = 0; i < 10; i++){
+		Parameters params = RunEnvironment.getInstance().getParameters();
+		
+		int masterAgentCount = params.getInteger("master_agent_count");
+		int basicAgentCount = params.getInteger("basic_agent_count");
+		
+		for(int i = 0; i < masterAgentCount; i++){
+			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
+			context.add(m);
+			try {
+				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(Integer.MAX_VALUE), m).start();
+			} catch (StaleProxyException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		for(int i = 0; i < basicAgentCount; i++){
+			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
+			context.add(b);
+			try {
+				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(Integer.MAX_VALUE), b).start();
+			} catch (StaleProxyException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		/*for(int i = 0; i < 10; i++){
 			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(m);
 			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
@@ -62,7 +88,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			} catch (StaleProxyException e) {
 				e.printStackTrace();
 			}
-		}
+		}*/
 		
 		//RunEnvironment.getInstance().setScheduleTickDelay(20);
 		RunOptionsModel options = new RunOptionsModel();

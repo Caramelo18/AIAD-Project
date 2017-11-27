@@ -158,6 +158,10 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 			}
 		}
 	}
+	
+	public void removeFollower(TradeAgent agent){
+		followers.remove(agent);
+	}
 		
 	protected void sendMessage(TradeAgent receiver, String text){
 		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
@@ -178,7 +182,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected void addSuggestedTrade(TradeAgent agent, String company){
-		SuggestedTrade trade = new SuggestedTrade(agent, company);
+		SuggestedTrade trade = new SuggestedTrade(agent, company, day);
 		this.suggestedTrades.add(trade);
 	}
 	

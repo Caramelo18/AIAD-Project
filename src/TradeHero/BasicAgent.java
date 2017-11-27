@@ -1,9 +1,12 @@
 package TradeHero;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.google.common.collect.*;
 
@@ -19,7 +22,7 @@ public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
 	private int numCompanies = agentsToFollow * 3;
-	
+	private final double unfollowProbability = 0.05;	
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
@@ -33,12 +36,14 @@ public class BasicAgent extends TradeAgent {
 		//for(String company: currentStock.keySet()){
 			//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
 		//}
-		
+		if (willUnfollow()){
+			stopFollowingAgent();
+		}
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
 			day++;
 			return;
-		}
+		} 
 		
 		TreeMultiset<TradeAgent> agents = TreeMultiset.create();
 		for(Object ob: space.getObjects()){
@@ -154,5 +159,65 @@ public class BasicAgent extends TradeAgent {
 	@Override
 	protected boolean willHaveProfit(String company){
 		return true;
+	}
+	
+	protected void stopFollowingAgent(){
+		if(!willUnfollow() && followedAgents.size() == 0)
+			return;
+		
+		ArrayList<AgentTrades> agentTrades = new ArrayList<AgentTrades>();
+		for(TradeAgent agent: followedAgents){
+			agentTrades.add(new AgentTrades(agent));
+		}
+		
+		for(SuggestedTrade suggestedTrade: suggestedTrades){
+			for(AgentTrades agents: agentTrades){
+				if(agents.getAgent().equals(suggestedTrade.getAgent())){
+					agents.addTrade(suggestedTrade);
+				}
+			}
+		}
+		
+		Collections.sort(agentTrades);
+		/*
+		for(AgentTrades agent: agentTrades){
+			System.out.println(agent.getAgent().getAID() + " " + agent.getCurrentProfit());
+		}*/
+		
+		Context<Object> context = ContextUtils.getContext(this);
+		Network<Object> net = (Network<Object>) context.getProjection("follow network");
+		
+		TradeAgent worstFollowed = agentTrades.get(0).getAgent();
+		net.removeEdge(net.getEdge(this, worstFollowed));
+		
+		int soldActions = 0;
+		for(SuggestedTrade trade: suggestedTrades){
+			if(trade.getAgent() == worstFollowed){
+				this.sellStock(trade.getCompany());
+				soldActions++;
+			}
+		}
+		followedAgents.remove(worstFollowed);
+		worstFollowed.removeFollower(this);
+		
+		agentsToFollow++;
+		numCompanies += soldActions;
+		
+		
+	}
+	
+	protected boolean willUnfollow(){
+		Random rand = new Random();
+		double val = rand.nextGaussian()*25 + 60;
+
+		if(day < val)
+			return false;
+		
+		val = rand.nextDouble();
+		
+		if(val < unfollowProbability)
+			return true;
+		
+		return false;
 	}
 }
