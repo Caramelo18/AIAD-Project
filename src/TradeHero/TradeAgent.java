@@ -72,6 +72,14 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		return cash + getStockValue();
 	}
 	
+	public double getFollowersProfit(){
+		return followersProfit;
+	}
+	
+	public int getNumStock(){
+		return this.currentStock.size();
+	}
+	
 	protected boolean purchaseStock(String company, int ammount){
 		if(ammount == 0)
 			return false;

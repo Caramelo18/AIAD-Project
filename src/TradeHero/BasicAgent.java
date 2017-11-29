@@ -199,7 +199,6 @@ public class BasicAgent extends TradeAgent {
 			int followDay = followHistory.get(trades.getAgent());
 			int daysFollowing = day - followDay;
 			if(trades.getCurrentProfit() == 0 && daysFollowing > 7){
-				System.out.println("heh bye " + day);
 				TradeAgent badAgent = trades.getAgent();
 				net.removeEdge(net.getEdge(this, badAgent));
 				
