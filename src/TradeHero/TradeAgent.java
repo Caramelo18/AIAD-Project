@@ -27,7 +27,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 
 	protected ArrayList<SuggestedTrade> suggestedTrades;
 	
-	protected final double shareMargin = 0.05;
+	protected final double shareMargin = 0.1;
 	
 	protected int day = 0;
 
@@ -53,16 +53,13 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	public double getStockValue(){
 		double value = 0;
 		
-		
 		for(String key: currentStock.keySet()){
-			//System.out.print(key);
 			int numStock = currentStock.get(key);
 			ArrayList<Double> companyStock = stocksListValues.get(key);
 			double dailyValue = companyStock.get(day);
 			
 			value += dailyValue * numStock;
 		}
-		//System.out.println("\n");
 		
 		return value;
 	}
@@ -76,6 +73,9 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected boolean purchaseStock(String company, int ammount){
+		if(ammount == 0)
+			return false;
+		
 		ArrayList<Double> companyStock = stocksListValues.get(company);
 		
 		double currentPrice = companyStock.get(day);

@@ -39,13 +39,19 @@ public class BasicAgent extends TradeAgent {
 			//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
 		//}
 		stopFollowingAgents();
-		
+		cleanStock();
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
 			day++;
 			return;
 		} 
 		
+		followAgent();
+			
+		day++;
+	}
+	
+	public void followAgent(){
 		TreeMultiset<TradeAgent> agents = TreeMultiset.create();
 		for(Object ob: space.getObjects()){
 			TradeAgent agent = (TradeAgent) ob;
@@ -67,8 +73,7 @@ public class BasicAgent extends TradeAgent {
 				followHistory.put(follow, day);
 				agentsToFollow--;
 			}
-		}	
-		day++;
+		}		
 	}
 	
 	public TradeAgent pickFollow(TradeAgent[] agents){
@@ -139,10 +144,9 @@ public class BasicAgent extends TradeAgent {
 			else if (action.equals("SELL")){
 				double value = this.sellStock(company);
 				this.informFollowers("SELL", company);
-				//System.out.println("Selling " + company);
 				
 				for(SuggestedTrade trade: suggestedTrades){
-					if(trade.getCompany().equals(company)){
+					if(trade.getCompany().equals(company) && trade.getAgent().equals(sender)){
 						this.shareProfit(trade, value);
 						suggestedTrades.remove(trade);
 						break;
@@ -153,7 +157,7 @@ public class BasicAgent extends TradeAgent {
 		}
 	}
 	
-	protected int getNumActionsToBuy(String company){
+	protected int getNumActionsToBuy(String company){		
 		double spend = cash/numCompanies;
 		numCompanies--;
 		double num = spend/getCurrentStockValue(company);
@@ -162,15 +166,16 @@ public class BasicAgent extends TradeAgent {
 	
 	@Override
 	protected boolean willHaveProfit(String company){
+		if(day >= (getNumDays() - 2))
+			return false;
+		
 		return true;
 	}
 	
 	protected void stopFollowingAgents(){
 		if(!reconsiderAgents() || followedAgents.size() == 0)
 			return;
-		
-		//System.out.println(day);
-		
+				
 		ArrayList<AgentTrades> agentTrades = new ArrayList<AgentTrades>();
 		for(TradeAgent agent: followedAgents){
 			agentTrades.add(new AgentTrades(agent));
@@ -193,7 +198,8 @@ public class BasicAgent extends TradeAgent {
 			//System.out.println(trades.getAgent().getAID() + " " + trades.getCurrentProfit());
 			int followDay = followHistory.get(trades.getAgent());
 			int daysFollowing = day - followDay;
-			if(trades.getCurrentProfit() == 0 && daysFollowing > 15){
+			if(trades.getCurrentProfit() == 0 && daysFollowing > 7){
+				System.out.println("heh bye " + day);
 				TradeAgent badAgent = trades.getAgent();
 				net.removeEdge(net.getEdge(this, badAgent));
 				
@@ -214,34 +220,34 @@ public class BasicAgent extends TradeAgent {
 			}
 			
 		}
-		/*
-		TradeAgent worstFollowed = agentTrades.get(0).getAgent();
-		net.removeEdge(net.getEdge(this, worstFollowed));
-		
-		int soldActions = 0;
-		for(SuggestedTrade trade: suggestedTrades){
-			if(trade.getAgent() == worstFollowed){
-				this.sellStock(trade.getCompany());
-				soldActions++;
-			}
-		}
-		followedAgents.remove(worstFollowed);
-		worstFollowed.removeFollower(this);
-		
-			
-		agentsToFollow++;
-		numCompanies += soldActions;
-		*/
-		
 	}
 	
 	protected boolean reconsiderAgents(){
 		Random rand = new Random();
 		double val = rand.nextGaussian()*20 + 20;
 
-		if(val < (getNumDays() / 3))
+		if(day < (getNumDays() / 3) || day > (getNumDays() - 15))
 			return false;
 				
 		return true;
+	}
+	
+	private void cleanStock(){
+		if(day < getNumDays() - 1 || currentStock.size() == 0)
+			return;
+		
+		String company = currentStock.entrySet().iterator().next().getKey();
+		
+		double value = this.sellStock(company);
+
+		for(SuggestedTrade trade: suggestedTrades){
+			if(trade.getCompany().equals(company)){
+				this.shareProfit(trade, value);
+				suggestedTrades.remove(trade);
+				break;
+			}
+		}
+		
+		cleanStock();	
 	}
 }

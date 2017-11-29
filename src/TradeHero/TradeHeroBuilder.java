@@ -27,6 +27,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 	private HashMap<String, TreeMap<String, Double>> stocks;
 	private HashMap<String, ArrayList<Double>> stocksValues;
 	private ContainerController mainContainer;
+	private boolean launchedJADE = false;
 	
 	@Override
 	public Context build(Context<Object> context) {
@@ -37,7 +38,8 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			mainContainer.removeLocalAgent((Agent) agent);
 		}
 		
-		launchJADE();
+		if(!launchedJADE)
+			launchJADE();
 		
 		ContinuousSpaceFactory spaceFactory = ContinuousSpaceFactoryFinder . createContinuousSpaceFactory ( null );
 		ContinuousSpace < Object > space = spaceFactory . createContinuousSpace ("space", context , new RandomCartesianAdder < Object >() , new repast . simphony . space . continuous . WrapAroundBorders () ,50 , 50);
@@ -104,6 +106,8 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		Runtime rt = Runtime.instance();
 		Profile p1 = new ProfileImpl();
 		mainContainer = rt.createMainContainer(p1);
+		
+		launchedJADE = true;
 	}
 	
 }

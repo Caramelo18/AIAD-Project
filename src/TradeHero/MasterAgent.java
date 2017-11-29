@@ -36,7 +36,7 @@ public class MasterAgent extends TradeAgent{
 		int buyAt = -1;
 		
 		for(int i = 0; i < values.size(); i++){
-			for(int j = i + 1; j < values.size(); j++){
+			for(int j = i + 1; j < values.size() - 2; j++){
 				double currentValue = values.get(j);
 				
 				double margin = currentValue - values.get(i);
@@ -48,10 +48,6 @@ public class MasterAgent extends TradeAgent{
 			}
 		}
 		
-		if(sellAt == values.size() - 1){
-			sellAt--;
-		}
-
 		return new Trade(name, buyAt, sellAt);
 	}
 	
@@ -96,6 +92,8 @@ public class MasterAgent extends TradeAgent{
 				break;
 			}
 		}
+		if(day >= t.getSell())
+			return false;
 		
 		double currentPrice = stocksListValues.get(t.getCompany()).get(day + 1);
 		double sellPrice = stocksListValues.get(t.getCompany()).get(t.getSell() + 1) * (1 - this.shareMargin);
