@@ -22,11 +22,13 @@ public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
 	private int numCompanies = agentsToFollow * 3;
-	private final double unfollowProbability = 0.05;	
+	private final double unfollowProbability = 0.01;
+	private HashMap<TradeAgent, Integer> followHistory;
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
 		followedAgents = new ArrayList<TradeAgent>();
+		followHistory = new HashMap<TradeAgent, Integer>();
 	}
 	
 	@ScheduledMethod(start = 1, interval = 1)
@@ -36,9 +38,8 @@ public class BasicAgent extends TradeAgent {
 		//for(String company: currentStock.keySet()){
 			//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
 		//}
-		if (willUnfollow()){
-			stopFollowingAgent();
-		}
+		stopFollowingAgents();
+		
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
 			day++;
@@ -63,6 +64,7 @@ public class BasicAgent extends TradeAgent {
 				net.addEdge(this, follow);
 				followedAgents.add(follow);
 				follow.addFollower(this);
+				followHistory.put(follow, day);
 				agentsToFollow--;
 			}
 		}	
@@ -142,6 +144,8 @@ public class BasicAgent extends TradeAgent {
 				for(SuggestedTrade trade: suggestedTrades){
 					if(trade.getCompany().equals(company)){
 						this.shareProfit(trade, value);
+						suggestedTrades.remove(trade);
+						break;
 					}
 				}
 			}
@@ -161,9 +165,11 @@ public class BasicAgent extends TradeAgent {
 		return true;
 	}
 	
-	protected void stopFollowingAgent(){
-		if(!willUnfollow() && followedAgents.size() == 0)
+	protected void stopFollowingAgents(){
+		if(!reconsiderAgents() || followedAgents.size() == 0)
 			return;
+		
+		//System.out.println(day);
 		
 		ArrayList<AgentTrades> agentTrades = new ArrayList<AgentTrades>();
 		for(TradeAgent agent: followedAgents){
@@ -179,14 +185,36 @@ public class BasicAgent extends TradeAgent {
 		}
 		
 		Collections.sort(agentTrades);
-		/*
-		for(AgentTrades agent: agentTrades){
-			System.out.println(agent.getAgent().getAID() + " " + agent.getCurrentProfit());
-		}*/
 		
 		Context<Object> context = ContextUtils.getContext(this);
 		Network<Object> net = (Network<Object>) context.getProjection("follow network");
 		
+		for(AgentTrades trades: agentTrades){
+			//System.out.println(trades.getAgent().getAID() + " " + trades.getCurrentProfit());
+			int followDay = followHistory.get(trades.getAgent());
+			int daysFollowing = day - followDay;
+			if(trades.getCurrentProfit() == 0 && daysFollowing > 15){
+				TradeAgent badAgent = trades.getAgent();
+				net.removeEdge(net.getEdge(this, badAgent));
+				
+				int soldActions = 0;
+				for(SuggestedTrade trade: suggestedTrades){
+					if(trade.getAgent() == badAgent){
+						this.sellStock(trade.getCompany());
+						soldActions++;
+					}
+				}
+				
+				followedAgents.remove(badAgent);
+				badAgent.removeFollower(this);
+				followHistory.remove(badAgent);
+				
+				agentsToFollow++;
+				numCompanies += soldActions;
+			}
+			
+		}
+		/*
 		TradeAgent worstFollowed = agentTrades.get(0).getAgent();
 		net.removeEdge(net.getEdge(this, worstFollowed));
 		
@@ -200,24 +228,20 @@ public class BasicAgent extends TradeAgent {
 		followedAgents.remove(worstFollowed);
 		worstFollowed.removeFollower(this);
 		
+			
 		agentsToFollow++;
 		numCompanies += soldActions;
-		
+		*/
 		
 	}
 	
-	protected boolean willUnfollow(){
+	protected boolean reconsiderAgents(){
 		Random rand = new Random();
-		double val = rand.nextGaussian()*25 + 60;
+		double val = rand.nextGaussian()*20 + 20;
 
-		if(day < val)
+		if(val < (getNumDays() / 3))
 			return false;
-		
-		val = rand.nextDouble();
-		
-		if(val < unfollowProbability)
-			return true;
-		
-		return false;
+				
+		return true;
 	}
 }

@@ -38,7 +38,6 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		this.currentStock = new HashMap<String, Integer>();
 		this.followers = new ArrayList<TradeAgent>();
 		this.suggestedTrades = new ArrayList<SuggestedTrade>();
-		//getNumDays();
 	}
 	
 	protected int getNumDays(){
@@ -112,6 +111,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 			earnings = ammount * currentPrice;
 			currentStock.remove(company);
 			cash += earnings;
+
 			return earnings;
 		}
 		

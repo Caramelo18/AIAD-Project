@@ -91,17 +91,18 @@ public class MasterAgent extends TradeAgent{
 		Trade t = null;
 		
 		for(Trade curr: trades){
-			if(curr.getCompany() == company)
+			if(curr.getCompany() == company){
 				t = curr;
+				break;
+			}
 		}
 		
 		double currentPrice = stocksListValues.get(t.getCompany()).get(day + 1);
+		double sellPrice = stocksListValues.get(t.getCompany()).get(t.getSell() + 1) * (1 - this.shareMargin);
 		
-		double sellPrice = stocksListValues.get(t.getCompany()).get(t.getSell()) * (1 - this.shareMargin);
-		 
-		if(sellPrice < currentPrice)
+		if(sellPrice > currentPrice)
 			return true;
-		return false;
 		
+		return false;
 	}
 }
