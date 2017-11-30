@@ -22,7 +22,7 @@ public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
 	private int numCompanies = agentsToFollow * 3;
-	private final double unfollowProbability = 0.01;
+	private final double unfollowProbability = 0.08;
 	private HashMap<TradeAgent, Integer> followHistory;
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
@@ -173,9 +173,49 @@ public class BasicAgent extends TradeAgent {
 	}
 	
 	protected void stopFollowingAgents(){
-		if(!reconsiderAgents() || followedAgents.size() == 0)
-			return;
+		if(willReconsiderStuckAgents() && followedAgents.size() > 0)
+			reconsiderStuckAgents();
+		
+		if(willReconsiderBadAgents() && followedAgents.size() > 0)
+			reconsiderBadAgents();
 				
+		
+	}
+	
+	protected boolean willReconsiderStuckAgents(){
+		if(day < (getNumDays() / 3) || day > (getNumDays() - 15))
+			return false;
+				
+		return true;
+	}
+	
+	protected boolean willReconsiderBadAgents(){
+		Random rand = new Random();
+		double val1 = rand.nextGaussian()*10 + 60;
+		double val2 = rand.nextGaussian()*10 + 60;
+		
+		//if(val < 25 && val > 70)
+		if(val2 < val1){
+			double copy = val1;
+			val1 = val2;
+			val2 = copy;
+		}
+		
+		//System.out.println(val1 + " - " + day + " - " +  val2);
+		
+		if(day >= val1 && day <= val2){
+			val1 = rand.nextDouble();
+			
+			if(val1 > unfollowProbability)
+				return false;
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private void reconsiderStuckAgents(){
 		ArrayList<AgentTrades> agentTrades = new ArrayList<AgentTrades>();
 		for(TradeAgent agent: followedAgents){
 			agentTrades.add(new AgentTrades(agent));
@@ -221,15 +261,48 @@ public class BasicAgent extends TradeAgent {
 		}
 	}
 	
-	protected boolean reconsiderAgents(){
-		Random rand = new Random();
-		double val = rand.nextGaussian()*20 + 20;
-
-		if(day < (getNumDays() / 3) || day > (getNumDays() - 15))
-			return false;
+	private void reconsiderBadAgents(){
+		ArrayList<AgentTrades> agentTrades = new ArrayList<AgentTrades>();
+		for(TradeAgent agent: followedAgents){
+			agentTrades.add(new AgentTrades(agent));
+		}
+		
+		for(SuggestedTrade suggestedTrade: suggestedTrades){
+			for(AgentTrades agents: agentTrades){
+				if(agents.getAgent().equals(suggestedTrade.getAgent())){
+					agents.addTrade(suggestedTrade);
+				}
+			}
+		}
+		
+		Collections.sort(agentTrades);
+		
+		Context<Object> context = ContextUtils.getContext(this);
+		Network<Object> net = (Network<Object>) context.getProjection("follow network");
+		
+		AgentTrades badAgentTrades = agentTrades.get(0);
 				
-		return true;
+		TradeAgent badAgent = badAgentTrades.getAgent();
+		net.removeEdge(net.getEdge(this, badAgent));
+		
+		int soldActions = 0;
+		for(SuggestedTrade trade: suggestedTrades){
+			if(trade.getAgent() == badAgent){
+				double cash = this.sellStock(trade.getCompany());
+				this.shareProfit(trade, cash);
+				soldActions++;
+			}
+		}
+		
+		followedAgents.remove(badAgent);
+		badAgent.removeFollower(this);
+		followHistory.remove(badAgent);
+		
+		agentsToFollow++;
+		numCompanies += soldActions;
+				
 	}
+	
 	
 	private void cleanStock(){
 		if(day < getNumDays() - 1 || currentStock.size() == 0)
