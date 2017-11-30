@@ -3,6 +3,10 @@
   <type>2D</type>
   <styles>
     <entry>
+      <string>TradeHero.IntermediateAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
       <string>TradeHero.BasicAgent</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
@@ -12,6 +16,10 @@
     </entry>
   </styles>
   <editedStyles>
+    <entry>
+      <string>TradeHero.IntermediateAgent</string>
+      <string>TradeHero.IntermediateAgent.style_0.xml</string>
+    </entry>
     <entry>
       <string>TradeHero.BasicAgent</string>
       <string>TradeHero.BasicAgent.style_0.xml</string>
@@ -41,19 +49,23 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1260503169</hashCode>
+    <hashCode>-463649808</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>space</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
+      <string>TradeHero.IntermediateAgent</string>
+      <int>0</int>
+    </entry>
+    <entry>
       <string>TradeHero.BasicAgent</string>
-      <int>1</int>
+      <int>2</int>
     </entry>
     <entry>
       <string>TradeHero.MasterAgent</string>
-      <int>0</int>
+      <int>1</int>
     </entry>
   </layerOrder>
   <projections>

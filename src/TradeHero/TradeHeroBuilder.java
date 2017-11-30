@@ -58,6 +58,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		
 		int masterAgentCount = params.getInteger("master_agent_count");
 		int basicAgentCount = params.getInteger("basic_agent_count");
+		int intermediateAgentCount = params.getInteger("intermediate_agent_count");
 		
 		for(int i = 0; i < masterAgentCount; i++){
 			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
@@ -79,7 +80,15 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			}
 		}
 		
-		IntermediateAgent i = new IntermediateAgent(space, stocks, stocksValues, stockData.getCompanies());
+		for(int i = 0; i < intermediateAgentCount; i++){
+			IntermediateAgent in = new IntermediateAgent(space, stocks, stocksValues, stockData.getCompanies());
+			context.add(in);
+			try {
+				mainContainer.acceptNewAgent("IntermediateAgent"+rand.nextInt(Integer.MAX_VALUE), in).start();
+			} catch (StaleProxyException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		/*for(int i = 0; i < 10; i++){
 			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
