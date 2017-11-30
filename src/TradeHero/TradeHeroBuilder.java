@@ -79,6 +79,8 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			}
 		}
 		
+		IntermediateAgent i = new IntermediateAgent(space, stocks, stocksValues, stockData.getCompanies());
+		
 		/*for(int i = 0; i < 10; i++){
 			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
 			context.add(m);

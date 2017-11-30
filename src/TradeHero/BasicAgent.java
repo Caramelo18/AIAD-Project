@@ -34,12 +34,10 @@ public class BasicAgent extends TradeAgent {
 	}
 	
 	public int getStuckAgents(){
-		System.out.println(stuckAgents);
 		return stuckAgents;
 	}
 	
 	public int getBadAgents(){
-		System.out.println(badAgents);
 		return badAgents;
 	}
 	
