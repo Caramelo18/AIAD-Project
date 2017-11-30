@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Average Values Chart</name>
-  <dataSet>Average Values</dataSet>
+  <name>Average Followers Earnings Chart</name>
+  <dataSet>Average Followers Earnings</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel>Value</yAxisLabel>
-  <chartTitle>Average Agents Values</chartTitle>
+  <chartTitle>Agents Followers Earnings</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -21,9 +21,9 @@
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Average MasterAgent Value</string>
+      <string>MasterAgent Followers Earnings</string>
       <SeriesData>
-        <label>Average MasterAgent Value</label>
+        <label>MasterAgent Followers Earnings</label>
         <color>
           <red>0</red>
           <green>0</green>
@@ -33,9 +33,9 @@
       </SeriesData>
     </entry>
     <entry>
-      <string>Average BasicAgent Value</string>
+      <string>BasicAgent Followers Earnings</string>
       <SeriesData>
-        <label>Average BasicAgent Value</label>
+        <label>BasicAgent Followers Earnings</label>
         <color>
           <red>255</red>
           <green>0</green>

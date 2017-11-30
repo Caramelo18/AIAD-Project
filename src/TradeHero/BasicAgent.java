@@ -24,11 +24,23 @@ public class BasicAgent extends TradeAgent {
 	private int numCompanies = agentsToFollow * 3;
 	private final double unfollowProbability = 0.08;
 	private HashMap<TradeAgent, Integer> followHistory;
+	private int stuckAgents = 0;
+	private int badAgents = 0;
 	
 	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
 		super(space, stocks, stockValues);
 		followedAgents = new ArrayList<TradeAgent>();
 		followHistory = new HashMap<TradeAgent, Integer>();
+	}
+	
+	public int getStuckAgents(){
+		System.out.println(stuckAgents);
+		return stuckAgents;
+	}
+	
+	public int getBadAgents(){
+		System.out.println(badAgents);
+		return badAgents;
 	}
 	
 	@ScheduledMethod(start = 1, interval = 1)
@@ -256,8 +268,8 @@ public class BasicAgent extends TradeAgent {
 				
 				agentsToFollow++;
 				numCompanies += soldActions;
+				stuckAgents++;
 			}
-			
 		}
 	}
 	
@@ -299,6 +311,7 @@ public class BasicAgent extends TradeAgent {
 		followHistory.remove(badAgent);
 		
 		agentsToFollow++;
+		badAgents++;
 		numCompanies += soldActions;
 				
 	}
