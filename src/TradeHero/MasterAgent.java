@@ -31,7 +31,7 @@ public class MasterAgent extends TradeAgent{
 	private Trade getMaximumProfit(String name){
 		ArrayList<Double> values = this.stocksListValues.get(name);
 		
-		Double maxProfit = (double) -500;
+		Double maxProfit = (double) -99999;
 		int sellAt = -1;
 		int buyAt = -1;
 		

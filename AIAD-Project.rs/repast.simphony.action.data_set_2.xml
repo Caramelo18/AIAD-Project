@@ -11,24 +11,33 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>21949185</hashCode>
+    <hashCode>-1711727717</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>MasterAgent Followers Earnings</string>
+      <string>Basic Agent Followers Earnings</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>MasterAgent Followers Earnings</id>
-        <className>TradeHero.MasterAgent</className>
+        <id>Basic Agent Followers Earnings</id>
+        <className>TradeHero.BasicAgent</className>
         <methodName>getFollowersProfit</methodName>
         <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>BasicAgent Followers Earnings</string>
+      <string>Intermediate Agent Followers Earnings</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>BasicAgent Followers Earnings</id>
-        <className>TradeHero.BasicAgent</className>
+        <id>Intermediate Agent Followers Earnings</id>
+        <className>TradeHero.IntermediateAgent</className>
+        <methodName>getFollowersProfit</methodName>
+        <aggType>MEAN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Master Agent Followers Earnings</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Master Agent Followers Earnings</id>
+        <className>TradeHero.MasterAgent</className>
         <methodName>getFollowersProfit</methodName>
         <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>

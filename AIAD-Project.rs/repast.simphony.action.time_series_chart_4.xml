@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Average Values Chart</name>
-  <dataSet>Average Values</dataSet>
+  <name>Unfollowed Agents Chart</name>
+  <dataSet>Unfollowed Agents</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
-  <yAxisLabel>Value</yAxisLabel>
-  <chartTitle>Average Agents Values</chartTitle>
+  <yAxisLabel>Number</yAxisLabel>
+  <chartTitle>Unfollowed Agents Count</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -21,25 +21,25 @@
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Average MasterAgent Value</string>
+      <string>Stuck Agents Unfollowed</string>
       <SeriesData>
-        <label>Average MasterAgent Value</label>
+        <label>Stuck Agents Unfollowed</label>
         <color>
-          <red>0</red>
+          <red>255</red>
           <green>0</green>
-          <blue>255</blue>
+          <blue>0</blue>
           <alpha>255</alpha>
         </color>
       </SeriesData>
     </entry>
     <entry>
-      <string>Average BasicAgent Value</string>
+      <string>Bad Agents Unfollowed</string>
       <SeriesData>
-        <label>Average BasicAgent Value</label>
+        <label>Bad Agents Unfollowed</label>
         <color>
-          <red>255</red>
+          <red>0</red>
           <green>0</green>
-          <blue>0</blue>
+          <blue>255</blue>
           <alpha>255</alpha>
         </color>
       </SeriesData>

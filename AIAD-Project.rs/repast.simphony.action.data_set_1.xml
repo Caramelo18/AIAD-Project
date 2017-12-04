@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Average Values</name>
+  <name>Unfollowed Agents</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -11,26 +11,26 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1769311021</hashCode>
+    <hashCode>-1223406205</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Average BasicAgent Value</string>
+      <string>Bad Agents Unfollowed</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Average BasicAgent Value</id>
+        <id>Bad Agents Unfollowed</id>
         <className>TradeHero.BasicAgent</className>
-        <methodName>getCurrentValue</methodName>
-        <aggType>MEAN</aggType>
+        <methodName>getBadAgents</methodName>
+        <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>Average MasterAgent Value</string>
+      <string>Stuck Agents Unfollowed</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Average MasterAgent Value</id>
-        <className>TradeHero.MasterAgent</className>
-        <methodName>getCurrentValue</methodName>
-        <aggType>MEAN</aggType>
+        <id>Stuck Agents Unfollowed</id>
+        <className>TradeHero.BasicAgent</className>
+        <methodName>getStuckAgents</methodName>
+        <aggType>SUM</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>

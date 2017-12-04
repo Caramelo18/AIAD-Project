@@ -3,7 +3,7 @@
   <dataSet>Average Followers Earnings</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
   <yAxisLabel>Value</yAxisLabel>
-  <chartTitle>Agents Followers Earnings</chartTitle>
+  <chartTitle>Average Agents Followers Earnings</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -21,25 +21,37 @@
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>MasterAgent Followers Earnings</string>
+      <string>Basic Agent Followers Earnings</string>
       <SeriesData>
-        <label>MasterAgent Followers Earnings</label>
+        <label>Basic Agent Followers Earnings</label>
         <color>
-          <red>0</red>
+          <red>255</red>
           <green>0</green>
-          <blue>255</blue>
+          <blue>0</blue>
           <alpha>255</alpha>
         </color>
       </SeriesData>
     </entry>
     <entry>
-      <string>BasicAgent Followers Earnings</string>
+      <string>Intermediate Agent Followers Earnings</string>
       <SeriesData>
-        <label>BasicAgent Followers Earnings</label>
+        <label>Intermediate Agent Followers Earnings</label>
         <color>
-          <red>255</red>
-          <green>0</green>
+          <red>0</red>
+          <green>153</green>
           <blue>0</blue>
+          <alpha>255</alpha>
+        </color>
+      </SeriesData>
+    </entry>
+    <entry>
+      <string>Master Agent Followers Earnings</string>
+      <SeriesData>
+        <label>Master Agent Followers Earnings</label>
+        <color>
+          <red>0</red>
+          <green>0</green>
+          <blue>255</blue>
           <alpha>255</alpha>
         </color>
       </SeriesData>

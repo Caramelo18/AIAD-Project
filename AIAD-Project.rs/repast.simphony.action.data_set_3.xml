@@ -1,5 +1,5 @@
 <repast.simphony.data2.engine.DataSetDescriptor>
-  <name>Unfollowed Agents</name>
+  <name>Average Values</name>
   <type>AGGREGATE</type>
   <inclTick>true</inclTick>
   <inclBatchRun>false</inclBatchRun>
@@ -11,26 +11,35 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1223406205</hashCode>
+    <hashCode>-1501265914</hashCode>
   </scheduleParams>
   <atEnd>false</atEnd>
   <methodDataSources class="linked-hash-map">
     <entry>
-      <string>Bad Agents Unfollowed</string>
+      <string>Basic Agent Average Value</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Bad Agents Unfollowed</id>
+        <id>Basic Agent Average Value</id>
         <className>TradeHero.BasicAgent</className>
-        <methodName>getBadAgents</methodName>
-        <aggType>SUM</aggType>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
     <entry>
-      <string>Stuck Agents Unfollowed</string>
+      <string>Intermediate Agent Average Value</string>
       <repast.simphony.data2.engine.MethodDataSourceDefinition>
-        <id>Stuck Agents Unfollowed</id>
-        <className>TradeHero.BasicAgent</className>
-        <methodName>getStuckAgents</methodName>
-        <aggType>SUM</aggType>
+        <id>Intermediate Agent Average Value</id>
+        <className>TradeHero.IntermediateAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Master Agent Average Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Master Agent Average Value</id>
+        <className>TradeHero.MasterAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
       </repast.simphony.data2.engine.MethodDataSourceDefinition>
     </entry>
   </methodDataSources>
