@@ -41,6 +41,43 @@ public class BasicAgent extends TradeAgent {
 		return badAgents;
 	}
 	
+	public int getBasicAgentsFollowed(){
+		int num = 0;
+		
+		for(TradeAgent agent: followedAgents){
+			if(agent.getClass().equals(BasicAgent.class))
+				++num;
+		}
+		
+		return num;
+	}
+	
+	public int getIntermediateAgentsFollowed(){
+		int num = 0;
+		
+		for(TradeAgent agent: followedAgents){
+			if(agent.getClass().equals(IntermediateAgent.class))
+				++num;
+		}
+		
+		return num;
+	}
+	
+	public int getMasterAgentsFollowed(){
+		int num = 0;
+		
+		for(TradeAgent agent: followedAgents){
+			if(agent.getClass().equals(MasterAgent.class))
+				++num;
+		}
+		
+		return num;
+	}
+	
+	public int getNumAgentsFollowed(){
+		return followedAgents.size();
+	}
+	
 	@ScheduledMethod(start = 1, interval = 1)
 	public void watch(){
 		receiveMessages();
