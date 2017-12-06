@@ -17,8 +17,8 @@ public class IntermediateAgent extends TradeAgent {
 	private Random r;
 	private ArrayList<String> companies;
 
-	public IntermediateAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies) {
-		super(space, stocks, stockValues);
+	public IntermediateAgent(ContinuousSpace<Object> space, ArrayList<String> companies) {
+		super(space);
 		this.trades = new ArrayList<Trade>();
 		this.r = new Random();
 		this.companies = companies;
@@ -37,7 +37,7 @@ public class IntermediateAgent extends TradeAgent {
 				buyAt = (int) (r.nextGaussian() * 10 + 25);
 				sellAt = (int) (r.nextGaussian() * 15 + 85);
 				
-				if(buyAt < sellAt && buyAt >= 0 && sellAt < (getNumDays() - 2))
+				if(buyAt < sellAt && buyAt >= 0 && sellAt < (Market.getNumDays() - 2))
 					validDays = true;
 			}
 			String company = companies.get(r.nextInt(numCompanies));

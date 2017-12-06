@@ -16,8 +16,8 @@ public class MasterAgent extends TradeAgent{
 	private int numCompanies = 3;
 	
 	
-	public MasterAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
-		super(space, stocks, stockValues);
+	public MasterAgent(ContinuousSpace<Object> space, ArrayList<String> companies){
+		super(space);
 		
 		Random r = new Random();
 		trades = new ArrayList<Trade>();
@@ -29,7 +29,7 @@ public class MasterAgent extends TradeAgent{
 	}
 	
 	private Trade getMaximumProfit(String name){
-		ArrayList<Double> values = this.stocksListValues.get(name);
+		ArrayList<Double> values = Market.getStocksListValues(this).get(name);
 		
 		Double maxProfit = (double) -99999;
 		int sellAt = -1;
@@ -53,6 +53,7 @@ public class MasterAgent extends TradeAgent{
 	
 	@ScheduledMethod(start = 1, interval = 1)
 	public void day() {
+		System.out.println("Master: " + day);
 		for(Trade t: trades){
 			if(t.getBuy() == day){
 				int num = getNumActionsToBuy(t.getCompany());
@@ -95,8 +96,8 @@ public class MasterAgent extends TradeAgent{
 		if(day >= t.getSell())
 			return false;
 		
-		double currentPrice = stocksListValues.get(t.getCompany()).get(day + 1);
-		double sellPrice = stocksListValues.get(t.getCompany()).get(t.getSell() + 1) * (1 - this.shareMargin);
+		double currentPrice = Market.getStocksListValues(this).get(t.getCompany()).get(day + 1);
+		double sellPrice = Market.getStocksListValues(this).get(t.getCompany()).get(t.getSell() + 1) * (1 - this.shareMargin);
 		
 		if(sellPrice > currentPrice)
 			return true;

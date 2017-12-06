@@ -13,8 +13,8 @@ import repast.simphony.util.ContextUtils;
 
 public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected ContinuousSpace<Object> space ;
-	protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
-	protected HashMap<String, ArrayList<Double>> stocksListValues;
+	/*protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
+	protected HashMap<String, ArrayList<Double>> stocksListValues;*/
 	protected String[] days;
 	
 	protected final int initialCash = 50000;
@@ -31,37 +31,13 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	
 	protected int day = 0;
 
-	public TradeAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues){
+	public TradeAgent(ContinuousSpace<Object> space){
 		this.space = space;
-		this.stocksDailyValues = stocks;
-		this.stocksListValues = stockValues;
+	/*	this.stocksDailyValues = stocks;
+		this.stocksListValues = stockValues;*/
 		this.currentStock = new HashMap<String, Integer>();
 		this.followers = new ArrayList<TradeAgent>();
 		this.suggestedTrades = new ArrayList<SuggestedTrade>();
-	}
-	
-	protected int getNumDays(){
-		int numDays = 99999;
-		for(String key: stocksListValues.keySet()){
-			ArrayList<Double> companyStock = stocksListValues.get(key);
-			if(companyStock.size() < numDays)
-				numDays = companyStock.size();
-		}
-		return numDays;
-	}
-	
-	public double getStockValue(){
-		double value = 0;
-		
-		for(String key: currentStock.keySet()){
-			int numStock = currentStock.get(key);
-			ArrayList<Double> companyStock = stocksListValues.get(key);
-			double dailyValue = companyStock.get(day);
-			
-			value += dailyValue * numStock;
-		}
-		
-		return value;
 	}
 	
 	public double getCurrentCash(){
@@ -69,7 +45,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	public double getCurrentValue(){
-		return cash + getStockValue();
+		return cash + Market.getStockValue(currentStock);
 	}
 	
 	public double getFollowersProfit(){
@@ -84,7 +60,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		if(ammount == 0)
 			return false;
 		
-		ArrayList<Double> companyStock = stocksListValues.get(company);
+		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
 		
 		double currentPrice = companyStock.get(day);
 		
@@ -105,7 +81,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected double sellStock(String company){
-		ArrayList<Double> companyStock = stocksListValues.get(company);
+		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
 		
 		double currentPrice = -1;
 		if(day >= companyStock.size())
@@ -135,7 +111,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected double getCurrentStockValue(String company){
-		ArrayList<Double> companyStock = stocksListValues.get(company);
+		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
 
 		return companyStock.get(day);
 	}

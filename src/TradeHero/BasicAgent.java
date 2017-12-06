@@ -27,8 +27,8 @@ public class BasicAgent extends TradeAgent {
 	private int stuckAgents = 0;
 	private int badAgents = 0;
 	
-	public BasicAgent(ContinuousSpace<Object> space, HashMap<String, TreeMap<String, Double>> stocks, HashMap<String, ArrayList<Double>> stockValues, ArrayList<String> companies){
-		super(space, stocks, stockValues);
+	public BasicAgent(ContinuousSpace<Object> space, ArrayList<String> companies){
+		super(space);
 		followedAgents = new ArrayList<TradeAgent>();
 		followHistory = new HashMap<TradeAgent, Integer>();
 	}
@@ -213,7 +213,7 @@ public class BasicAgent extends TradeAgent {
 	
 	@Override
 	protected boolean willHaveProfit(String company){
-		if(day >= (getNumDays() - 2))
+		if(day >= (Market.getNumDays() - 2))
 			return false;
 		
 		return true;
@@ -230,7 +230,7 @@ public class BasicAgent extends TradeAgent {
 	}
 	
 	protected boolean willReconsiderStuckAgents(){
-		if(day < (getNumDays() / 3) || day > (getNumDays() - 15))
+		if(day < (Market.getNumDays() / 3) || day > (Market.getNumDays() - 15))
 			return false;
 				
 		return true;
@@ -353,7 +353,7 @@ public class BasicAgent extends TradeAgent {
 	
 	
 	private void cleanStock(){
-		if(day < getNumDays() - 1 || currentStock.size() == 0)
+		if(day < Market.getNumDays() - 1 || currentStock.size() == 0)
 			return;
 		
 		String company = currentStock.entrySet().iterator().next().getKey();

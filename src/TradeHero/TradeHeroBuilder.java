@@ -60,8 +60,11 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		int basicAgentCount = params.getInteger("basic_agent_count");
 		int intermediateAgentCount = params.getInteger("intermediate_agent_count");
 		
+		Market market = new Market(stocks,stocksValues);
+		context.add(market);
+		
 		for(int i = 0; i < masterAgentCount; i++){
-			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
+			MasterAgent m = new MasterAgent(space, stockData.getCompanies());
 			context.add(m);
 			try {
 				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(Integer.MAX_VALUE), m).start();
@@ -71,7 +74,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		}
 		
 		for(int i = 0; i < basicAgentCount; i++){
-			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
+			BasicAgent b = new BasicAgent(space, stockData.getCompanies());
 			context.add(b);
 			try {
 				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(Integer.MAX_VALUE), b).start();
@@ -81,7 +84,7 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 		}
 		
 		for(int i = 0; i < intermediateAgentCount; i++){
-			IntermediateAgent in = new IntermediateAgent(space, stocks, stocksValues, stockData.getCompanies());
+			IntermediateAgent in = new IntermediateAgent(space, stockData.getCompanies());
 			context.add(in);
 			try {
 				mainContainer.acceptNewAgent("IntermediateAgent"+rand.nextInt(Integer.MAX_VALUE), in).start();
