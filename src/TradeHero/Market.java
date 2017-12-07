@@ -54,4 +54,10 @@ public class Market {
 			return Market.stocksListValues;
 		}
 	}
+
+	public static ArrayList<Double> getCompanyStockValue(String company) {
+		ArrayList<Double> ret = new ArrayList<Double>();
+		
+		return ret;
+	}
 }
