@@ -60,9 +60,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		if(ammount == 0)
 			return false;
 		
-		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
-		
-		double currentPrice = companyStock.get(day);
+		double currentPrice = Market.getCompanyStockValue(company);
 		
 		double cost = currentPrice * ammount;
 		
@@ -81,13 +79,9 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected double sellStock(String company){
-		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
 		
-		double currentPrice = -1;
-		if(day >= companyStock.size())
-			currentPrice= companyStock.get(companyStock.size() - 1);
-		else
-			currentPrice = companyStock.get(day);
+		double currentPrice = Market.getCompanyStockValue(company);
+		
 		
 		double earnings = -1;
 		if(currentStock.containsKey(company)){
@@ -111,9 +105,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected double getCurrentStockValue(String company){
-		ArrayList<Double> companyStock = Market.getStocksListValues(this).get(company);
-
-		return companyStock.get(day);
+		return Market.getCompanyStockValue(company);
 	}
 	
 	protected double getAgentRatio(){
@@ -174,6 +166,8 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 		Context<Object> context = ContextUtils.getContext(this);
 		
 		for(Object obj: context){
+			if(obj.getClass() == Market.class)
+				continue;
 			TradeAgent agent = (TradeAgent) obj;
 			if(agent.getAID().equals(aid))
 				return agent;	

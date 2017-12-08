@@ -101,6 +101,8 @@ public class BasicAgent extends TradeAgent {
 	public void followAgent(){
 		TreeMultiset<TradeAgent> agents = TreeMultiset.create();
 		for(Object ob: space.getObjects()){
+			if(ob.getClass() == Market.class)
+				continue;
 			TradeAgent agent = (TradeAgent) ob;
 			agents.add(agent);
 		}

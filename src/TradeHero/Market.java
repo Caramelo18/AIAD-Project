@@ -55,9 +55,14 @@ public class Market {
 		}
 	}
 
-	public static ArrayList<Double> getCompanyStockValue(String company) {
-		ArrayList<Double> ret = new ArrayList<Double>();
+	public static double getCompanyStockValue(String company) {
+		return Market.stocksListValues.get(company).get(Market.day);
+	}
+
+	public static double getCompanyStockValue(String company, int day) {
+		if(Market.day < day) 
+			return (Double) null;
 		
-		return ret;
+		return Market.stocksListValues.get(company).get(day);
 	}
 }

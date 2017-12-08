@@ -24,13 +24,8 @@ public class AgentTrades implements Comparable<AgentTrades>{
 		double currentProfit = 0;
 		
 		for(SuggestedTrade trade: trades){
-			if(agent.day >= Market.getCompanyStockValue(trade.getCompany()).size()/*agent.stocksListValues.get(trade.getCompany()).size()*/){
-				continue;
-			}
-			
-			ArrayList<Double> prices = Market.getCompanyStockValue(trade.getCompany());
-			double currentPrice = prices.get(agent.day);
-			double purchasePrice = prices.get(trade.getPurchaseDay());
+			double currentPrice = Market.getCompanyStockValue(trade.getCompany());
+			double purchasePrice = Market.getCompanyStockValue(trade.getCompany(), trade.getPurchaseDay());
 			
 			double increase = (currentPrice - purchasePrice) / purchasePrice;
 			
