@@ -1,4 +1,4 @@
-package TradeHero;
+package StockData;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

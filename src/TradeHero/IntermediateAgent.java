@@ -1,11 +1,8 @@
 package TradeHero;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.TreeMap;
 
-import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.space.continuous.ContinuousSpace;
 
@@ -47,18 +44,16 @@ public class IntermediateAgent extends TradeAgent {
 		}		
 	}
 	
-	@ScheduledMethod(start = 1, interval = 1)
+	@ScheduledMethod(start = 1, interval = 1, priority = 2)
 	public void day() {
 		for(Trade t: trades){
 			if(t.getBuy() == day){
 				int num = getNumActionsToBuy(t.getCompany());
 				purchaseStock(t.getCompany(), num);
-				//System.out.println("Sending Buy");
 				informFollowers("BUY", t.getCompany());
 			}
 			else if(t.getSell() == day){
 				sellStock(t.getCompany());
-				//System.out.println("Sending Sell");
 				informFollowers("SELL", t.getCompany());
 			}
 		}

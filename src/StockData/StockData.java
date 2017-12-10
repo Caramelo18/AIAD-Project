@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import TradeHero.Stock;
 
 public class StockData implements Serializable{
 	
@@ -24,11 +23,9 @@ public class StockData implements Serializable{
 		
 		if(f.exists() && !f.isDirectory()){
 			load();
-			//System.out.println("Loading");
 		} else {
 			fetchData();
 			save();
-			//System.out.println("Saving");
 		}
 	}
 	

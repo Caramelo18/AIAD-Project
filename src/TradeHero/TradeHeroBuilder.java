@@ -93,25 +93,9 @@ public class TradeHeroBuilder implements ContextBuilder<Object> {
 			}
 		}
 		
-		/*for(int i = 0; i < 10; i++){
-			MasterAgent m = new MasterAgent(space, stocks, stocksValues, stockData.getCompanies());
-			context.add(m);
-			BasicAgent b = new BasicAgent(space, stocks, stocksValues, stockData.getCompanies());
-			context.add(b);
-			try {
-				mainContainer.acceptNewAgent("BasicAgent"+rand.nextInt(Integer.MAX_VALUE), b).start();
-				mainContainer.acceptNewAgent("MasterAgent"+rand.nextInt(Integer.MAX_VALUE), m).start();
-			} catch (StaleProxyException e) {
-				e.printStackTrace();
-			}
-		}*/
-		
-		//RunEnvironment.getInstance().setScheduleTickDelay(20);
 		RunOptionsModel options = new RunOptionsModel();
-		options.setScheduleTickDelay(200);
-		options.setStopAt(101);
+		options.setStopAt(Market.getNumDays() + 1);
 		options.simStarted();
-		
 		
 		return context;
 	}

@@ -2,7 +2,6 @@ package TradeHero;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
@@ -13,9 +12,6 @@ import repast.simphony.util.ContextUtils;
 
 public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected ContinuousSpace<Object> space ;
-	/*protected HashMap<String, TreeMap<String, Double>> stocksDailyValues;
-	protected HashMap<String, ArrayList<Double>> stocksListValues;*/
-	protected String[] days;
 	
 	protected final int initialCash = 50000;
 	protected double followersProfit = 0;
@@ -33,11 +29,10 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 
 	public TradeAgent(ContinuousSpace<Object> space){
 		this.space = space;
-	/*	this.stocksDailyValues = stocks;
-		this.stocksListValues = stockValues;*/
 		this.currentStock = new HashMap<String, Integer>();
 		this.followers = new ArrayList<TradeAgent>();
 		this.suggestedTrades = new ArrayList<SuggestedTrade>();
+		this.day = 0;
 	}
 	
 	public double getCurrentCash(){
@@ -79,9 +74,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	protected double sellStock(String company){
-		
 		double currentPrice = Market.getCompanyStockValue(company);
-		
 		
 		double earnings = -1;
 		if(currentStock.containsKey(company)){
@@ -126,7 +119,6 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	public void addFollower(TradeAgent agent){
 		followers.add(agent);
 		
-		//System.out.println("Joined follower");
 		for(String company: currentStock.keySet()){
 			if(willHaveProfit(company)){
 				String message = "BUY " + company;
@@ -142,8 +134,7 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	protected void sendMessage(TradeAgent receiver, String text){
 		ACLMessage message = new ACLMessage(ACLMessage.INFORM);
 		AID receiverAgent = (AID) receiver.getAID();
-		
-		//System.out.println("SEND " + text + " " + this.getAID() + " " + day);
+
 		message.addReceiver(receiverAgent);
 		message.setContent(text);
 		send(message);

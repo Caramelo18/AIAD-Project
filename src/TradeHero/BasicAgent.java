@@ -2,11 +2,8 @@ package TradeHero;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 import com.google.common.collect.*;
 
@@ -78,15 +75,12 @@ public class BasicAgent extends TradeAgent {
 		return followedAgents.size();
 	}
 	
-	@ScheduledMethod(start = 1, interval = 1)
+	@ScheduledMethod(start = 1, interval = 1, priority = 1)
 	public void watch(){
 		receiveMessages();
 
-		//for(String company: currentStock.keySet()){
-			//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
-		//}
 		stopFollowingAgents();
-		cleanStock();
+		//cleanStock();
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
 			day++;
@@ -145,26 +139,22 @@ public class BasicAgent extends TradeAgent {
 			max = agentsRatios.get(agentsRatios.size() - 1).getRatio();
 		Random rand = new Random();
 		double pick = rand.nextDouble()*max;
-		
-		//System.out.println("pick: " +  pick);
+
+
 		for(AgentRatio agent: agentsRatios){
 			if(pick < agent.getRatio()){
 				follow = agent.getAgent();
 				break;
 			}
 		}
-		
-		/*for(AgentRatio agent: agentsRatios){
-			System.out.println(agent.getAgent().getAgentRatio() + " " + agent.getRatio());
-		}
-		System.out.println("\n");*/
+
 		return follow;
 	}
 	
 	public boolean isFollowing(){
 		Random rand = new Random();
 		double val = rand.nextGaussian()*25 + 50;
-		//System.out.println("Random: " + val);
+
 		if(day >= val)
 			return true;
 		else
@@ -183,7 +173,7 @@ public class BasicAgent extends TradeAgent {
 			String[] messageParts = content.split(" ");
 			String action = messageParts[0];
 			String company = messageParts[1];
-			//System.out.println("RECEIVE " + content + " " + this.getAID() + " " + day);
+
 			if(action.equals("BUY")){
 				int numStock = getNumActionsToBuy(company);
 				this.purchaseStock(company, numStock);
@@ -243,14 +233,11 @@ public class BasicAgent extends TradeAgent {
 		double val1 = rand.nextGaussian()*10 + 60;
 		double val2 = rand.nextGaussian()*10 + 60;
 		
-		//if(val < 25 && val > 70)
 		if(val2 < val1){
 			double copy = val1;
 			val1 = val2;
 			val2 = copy;
 		}
-		
-		//System.out.println(val1 + " - " + day + " - " +  val2);
 		
 		if(day >= val1 && day <= val2){
 			val1 = rand.nextDouble();
@@ -284,7 +271,6 @@ public class BasicAgent extends TradeAgent {
 		Network<Object> net = (Network<Object>) context.getProjection("follow network");
 		
 		for(AgentTrades trades: agentTrades){
-			//System.out.println(trades.getAgent().getAID() + " " + trades.getCurrentProfit());
 			int followDay = followHistory.get(trades.getAgent());
 			int daysFollowing = day - followDay;
 			if(trades.getCurrentProfit() == 0 && daysFollowing > 7){

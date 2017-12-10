@@ -1,9 +1,7 @@
 package TradeHero;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.TreeMap;
 
 import repast.simphony.engine.environment.RunEnvironment;
 import repast.simphony.engine.schedule.ScheduledMethod;
@@ -51,28 +49,21 @@ public class MasterAgent extends TradeAgent{
 		return new Trade(name, buyAt, sellAt);
 	}
 	
-	@ScheduledMethod(start = 1, interval = 1)
+	@ScheduledMethod(start = 1, interval = 1, priority = 3)
 	public void day() {
-		System.out.println("Master: " + day);
 		for(Trade t: trades){
 			if(t.getBuy() == day){
 				int num = getNumActionsToBuy(t.getCompany());
 				purchaseStock(t.getCompany(), num);
-				//System.out.println("Sending Buy");
 				informFollowers("BUY", t.getCompany());
 			}
 			else if(t.getSell() == day){
 				sellStock(t.getCompany());
-				//System.out.println("Sending Sell");
 				informFollowers("SELL", t.getCompany());
 			}
 		}
 		day++;
-		//System.out.println(this.getAID() + " " + day + " " + currentStock.size());
 
-		//System.out.println("Followers profit: " + this.followersProfit + " " + this.cash);
-		
-		//TODO: is this ok?
 		RunEnvironment.getInstance().setScheduleTickDelay(20);
 	}
 	
