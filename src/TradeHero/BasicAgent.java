@@ -19,7 +19,7 @@ public class BasicAgent extends TradeAgent {
 	
 	private int agentsToFollow = 3;
 	private int numCompanies = agentsToFollow * 3;
-	private final double unfollowProbability = 0.08;
+	private final double unfollowProbability = 0.05;
 	private HashMap<TradeAgent, Integer> followHistory;
 	private int stuckAgents = 0;
 	private int badAgents = 0;
@@ -80,7 +80,7 @@ public class BasicAgent extends TradeAgent {
 		receiveMessages();
 
 		stopFollowingAgents();
-		//cleanStock();
+
 		if(agentsToFollow <= 0 || !isFollowing())
 		{
 			day++;
@@ -337,25 +337,5 @@ public class BasicAgent extends TradeAgent {
 		badAgents++;
 		numCompanies += soldActions;
 				
-	}
-	
-	
-	private void cleanStock(){
-		if(day < Market.getNumDays() - 1 || currentStock.size() == 0)
-			return;
-		
-		String company = currentStock.entrySet().iterator().next().getKey();
-		
-		double value = this.sellStock(company);
-
-		for(SuggestedTrade trade: suggestedTrades){
-			if(trade.getCompany().equals(company)){
-				this.shareProfit(trade, value);
-				suggestedTrades.remove(trade);
-				break;
-			}
-		}
-		
-		cleanStock();	
 	}
 }

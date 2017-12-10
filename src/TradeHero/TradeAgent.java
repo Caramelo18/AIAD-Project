@@ -90,6 +90,9 @@ public class TradeAgent extends Agent implements Comparable<TradeAgent>{
 	}
 	
 	public double getSize(){
+		if(this.getCurrentValue() <= 45000)
+			return 50;
+		
 		double margin = (this.getCurrentValue() - this.initialCash) / this.initialCash;
 		margin *= 5;
 		margin += 1;

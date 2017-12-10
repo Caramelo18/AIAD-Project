@@ -1,0 +1,103 @@
+<repast.simphony.data2.engine.DataSetDescriptor>
+  <name>Agents Values</name>
+  <type>AGGREGATE</type>
+  <inclTick>true</inclTick>
+  <inclBatchRun>false</inclBatchRun>
+  <inclRandomSeed>true</inclRandomSeed>
+  <scheduleParams>
+    <start>1.0</start>
+    <interval>1.0</interval>
+    <priority>-Infinity</priority>
+    <pType>LAST</pType>
+    <duration>-1.0</duration>
+    <frequency>REPEAT</frequency>
+    <hashCode>-1695167097</hashCode>
+  </scheduleParams>
+  <atEnd>false</atEnd>
+  <methodDataSources class="linked-hash-map">
+    <entry>
+      <string>Basic Agent Max Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Basic Agent Max Value</id>
+        <className>TradeHero.BasicAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MAX</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Basic Agent Average Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Basic Agent Average Value</id>
+        <className>TradeHero.BasicAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Basic Agent Min Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Basic Agent Min Value</id>
+        <className>TradeHero.BasicAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MIN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Intermediate Agent Max Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Intermediate Agent Max Value</id>
+        <className>TradeHero.IntermediateAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MAX</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Intermediate Agent Average Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Intermediate Agent Average Value</id>
+        <className>TradeHero.IntermediateAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Intermediate Agent Min Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Intermediate Agent Min Value</id>
+        <className>TradeHero.IntermediateAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MIN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Master Agent Max Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Master Agent Max Value</id>
+        <className>TradeHero.MasterAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MAX</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Master Agent Average Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Master Agent Average Value</id>
+        <className>TradeHero.MasterAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MEAN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+    <entry>
+      <string>Master Agent Min Value</string>
+      <repast.simphony.data2.engine.MethodDataSourceDefinition>
+        <id>Master Agent Min Value</id>
+        <className>TradeHero.MasterAgent</className>
+        <methodName>getCurrentValue</methodName>
+        <aggType>MIN</aggType>
+      </repast.simphony.data2.engine.MethodDataSourceDefinition>
+    </entry>
+  </methodDataSources>
+  <countSources class="linked-hash-map"/>
+  <customNADataSources class="linked-hash-map"/>
+  <customAggDataSources class="linked-hash-map"/>
+</repast.simphony.data2.engine.DataSetDescriptor>

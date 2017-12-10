@@ -1,9 +1,9 @@
 <repast.simphony.chart2.engine.TimeSeriesChartDescriptor>
-  <name>Number of Agents Followed Chart</name>
-  <dataSet>Number of Agents Followed</dataSet>
+  <name>Average Agent Values Chart</name>
+  <dataSet>Average Values</dataSet>
   <xAxisLabel>Tick Count</xAxisLabel>
-  <yAxisLabel>Number</yAxisLabel>
-  <chartTitle>Number of Agents Followed</chartTitle>
+  <yAxisLabel>Value</yAxisLabel>
+  <chartTitle>Average Agents Values</chartTitle>
   <type>TIME_SERIES</type>
   <background>
     <red>192</red>
@@ -21,33 +21,9 @@
   <showLegend>true</showLegend>
   <seriesIds>
     <entry>
-      <string>Master Agents Followed</string>
+      <string>Basic Agent Average Value</string>
       <SeriesData>
-        <label>Master Agents Followed</label>
-        <color>
-          <red>0</red>
-          <green>0</green>
-          <blue>255</blue>
-          <alpha>255</alpha>
-        </color>
-      </SeriesData>
-    </entry>
-    <entry>
-      <string>Intermediate Agents Followed</string>
-      <SeriesData>
-        <label>Intermediate Agents Followed</label>
-        <color>
-          <red>0</red>
-          <green>153</green>
-          <blue>0</blue>
-          <alpha>255</alpha>
-        </color>
-      </SeriesData>
-    </entry>
-    <entry>
-      <string>Basic Agents Followed</string>
-      <SeriesData>
-        <label>Basic Agents Followed</label>
+        <label>Basic Agent Average Value</label>
         <color>
           <red>255</red>
           <green>0</green>
@@ -57,12 +33,24 @@
       </SeriesData>
     </entry>
     <entry>
-      <string>Total Agents Followed</string>
+      <string>Master Agent Average Value</string>
       <SeriesData>
-        <label>Total Agents Followed</label>
+        <label>Master Agent Average Value</label>
         <color>
           <red>0</red>
           <green>0</green>
+          <blue>255</blue>
+          <alpha>255</alpha>
+        </color>
+      </SeriesData>
+    </entry>
+    <entry>
+      <string>Intermediate Agent Average Value</string>
+      <SeriesData>
+        <label>Intermediate Agent Average Value</label>
+        <color>
+          <red>0</red>
+          <green>153</green>
           <blue>0</blue>
           <alpha>255</alpha>
         </color>
